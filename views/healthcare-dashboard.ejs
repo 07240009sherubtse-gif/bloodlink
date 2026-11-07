@@ -1,0 +1,17 @@
+<%- include('partials/header',{title:'Dashboard'}) %>
+<p>Hello, <%= user.name %>! <% if(user.hospital){ %>You are managing blood stock for <b><%= user.hospital %></b>.<% } %></p>
+<% if(alert){ %><div class="alert"><b>Latest Alert</b><p><%= alert.title %> — <%= alert.body %></p><a class="btn" href="/manage/alerts">Manage Alerts</a></div><% } %>
+<div class="grid">
+<a class="tile" href="/manage/requests"><b><%= counts.open %></b><span>Open requests</span></a>
+<a class="tile <%= counts.urgent ? 'Critical' : '' %>" href="/manage/requests"><b><%= counts.urgent %></b><span>Urgent requests</span></a>
+<a class="tile" href="/manage/donations"><b><%= pendingDonations %></b><span>Donations awaiting review</span></a>
+</div>
+<h3>Your Hospital Stock</h3>
+<% if(hospitalStock.length){ %><div class="grid"><% hospitalStock.forEach(s=>{ %><div class="tile <%= stat(s.units) %>"><b><%= s.blood_group %></b><span><%= s.units %> units</span><em><%= stat(s.units) %></em></div><% }) %></div>
+<p><a href="/manage/stock">Update stock levels</a></p>
+<% } else { %><p>No hospital is linked to your account.</p><% } %>
+<h3>Open Blood Requests</h3>
+<table><tr><th>Patient</th><th>Group</th><th>Hospital</th><th>Urgent</th><th>Status</th></tr>
+<% openRequests.forEach(r=>{ %><tr><td><%= r.patient_name %></td><td><%= r.blood_group %></td><td><%= r.hospital %></td><td><%= r.urgent ? 'Yes' : 'No' %></td><td><span class="b <%= r.status.replace(/ /g,'') %>"><%= r.status %></span></td></tr><% }) %>
+<% if(!openRequests.length){ %><tr><td colspan="5">No open requests.</td></tr><% } %></table>
+<%- include('partials/footer') %>

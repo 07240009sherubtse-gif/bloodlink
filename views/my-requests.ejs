@@ -1,0 +1,5 @@
+<%- include('partials/header',{title:'My Requests'}) %>
+<table><tr><th>Date</th><th>Patient</th><th>Group</th><th>Hospital</th><th>Status</th></tr>
+<% rows.forEach(r=>{ %><tr><td><%= new Date(r.created_at).toLocaleDateString() %></td><td><%= r.patient_name %></td><td><%= r.blood_group %></td><td><%= r.hospital %></td><td><span class="b <%= r.status.replace(/ /g,'') %>"><%= r.status %></span></td></tr><% }) %>
+<% if(!rows.length){ %><tr><td colspan="5">No requests yet.</td></tr><% } %></table>
+<%- include('partials/footer') %>

@@ -1,0 +1,5 @@
+<%- include('partials/header',{title:'Blood Availability'}) %>
+<div class="grid"><% stock.forEach(s=>{ %><div class="tile <%= stat(s.units) %>"><b><%= s.blood_group %></b><span><%= s.units %> units</span><em><%= stat(s.units) %></em></div><% }) %></div>
+<h3>Hospital-wise Availability</h3><div class="scroll"><table><tr><th>Hospital</th><% G.forEach(g=>{ %><th><%= g %></th><% }) %></tr>
+<% Object.keys(hospitals).forEach(h=>{ %><tr><td><%= h %></td><% G.forEach(g=>{ %><td><%= hospitals[h][g] ?? 0 %></td><% }) %></tr><% }) %></table></div>
+<%- include('partials/footer') %>

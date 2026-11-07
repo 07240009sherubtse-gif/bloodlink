@@ -1,0 +1,5 @@
+<%- include('partials/header',{title:'My Donations'}) %>
+<table><tr><th>Date</th><th>Group</th><th>Hospital</th><th>Status</th></tr>
+<% rows.forEach(r=>{ %><tr><td><%= new Date(r.created_at).toLocaleDateString() %></td><td><%= r.blood_group %></td><td><%= r.hospital %></td><td><span class="b <%= r.status.replace(/ /g,'') %>"><%= r.status %></span></td></tr><% }) %>
+<% if(!rows.length){ %><tr><td colspan="4">No donations yet. <a href="/donate">Donate blood</a></td></tr><% } %></table>
+<%- include('partials/footer') %>

@@ -1,0 +1,11 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title><%= title %> | BLOODLink</title><link rel="stylesheet" href="/css/styles.css"></head>
+<body><div class="app">
+<aside class="side"><div class="logo">🩸 BLOOD<b>Link</b><small>Give Blood. Save Lives.</small></div>
+<nav><% nav.forEach(l=>{ %>
+<a href="<%= l.href %>" class="<%= active===l.href?'on':'' %>"><%= l.label %></a><% }) %></nav>
+<p class="tag">“Together we can make a difference.”</p></aside>
+<main><header class="top"><% if(user.role==='user'||user.role==='healthcare'){ %><form action="/find"><input name="term" placeholder="Search donors, blood groups, or requests..."></form><% } else { %><span></span><% } %>
+<span><%= user.name %><% if(user.role==='user'){ %> (<%= user.bg||'-' %>)<% } else { %> <span class="b Role"><%= user.roleLabel %></span><% } %> · <a href="/logout">Log out</a></span></header>
+<section class="content"><h1><%= title %></h1><% if(err){ %><p class="msg"><%= err %></p><% } %><% if(ok){ %><p class="msg ok"><%= ok %></p><% } %>

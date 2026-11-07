@@ -1,0 +1,9 @@
+<%- include('partials/header',{title:'Dashboard'}) %>
+<p>Hello, <%= user.name %>! Thank you for being a part of the life-saving community.</p>
+<% if(alert){ %><div class="alert"><b>Emergency Blood Request</b><p><%= alert.title %> — <%= alert.body %></p><a class="btn" href="/alerts">View Details</a></div><% } %>
+<h3>Blood Availability</h3><div class="grid"><% stock.forEach(s=>{ %><div class="tile <%= stat(s.units) %>"><b><%= s.blood_group %></b><span><%= s.units %> units</span><em><%= stat(s.units) %></em></div><% }) %></div>
+<div class="two"><div><h3>Request Status</h3><table><tr><th>Patient</th><th>Group</th><th>Hospital</th><th>Status</th></tr>
+<% requests.forEach(r=>{ %><tr><td><%= r.patient_name %></td><td><%= r.blood_group %></td><td><%= r.hospital %></td><td><span class="b <%= r.status.replace(/ /g,'') %>"><%= r.status %></span></td></tr><% }) %>
+<% if(!requests.length){ %><tr><td colspan="4">No requests yet. <a href="/request">Request blood</a></td></tr><% } %></table></div>
+<div><h3>Nearby Donors</h3><% donors.forEach(d=>{ %><p class="row"><b><%= d.full_name %></b> <span class="b Completed"><%= d.blood_group %></span> <small><%= d.address||'' %></small></p><% }) %></div></div>
+<%- include('partials/footer') %>

@@ -1,0 +1,8 @@
+<%- include('partials/header',{title:'Donate Blood'}) %>
+<form class="card wide" method="post"><h3>Donor Information</h3>
+<label>Blood Group<select name="blood_group"><% G.forEach(g=>{ %><option <%= g===user.bg?'selected':'' %>><%= g %></option><% }) %></select></label>
+<label>Last Donation Date<input type="date" name="donated_on"></label>
+<label>Hospital / Location<input name="hospital" required></label>
+<label class="chk"><input type="checkbox" required> I agree to the terms and conditions</label>
+<button>Register as Donor</button></form>
+<%- include('partials/footer') %>

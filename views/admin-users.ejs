@@ -1,0 +1,15 @@
+<%- include('partials/header',{title:'Users'}) %>
+<form class="bar" method="get"><input name="q" value="<%= filters.q %>" placeholder="Search by name or email">
+<select name="role"><option value="">All types</option><% roles.forEach(r=>{ %><option value="<%= r %>" <%= r===filters.role?'selected':'' %>><%= ROLE_LABELS[r] %></option><% }) %></select>
+<select name="status"><option value="">All statuses</option><% statuses.forEach(s=>{ %><option value="<%= s %>" <%= s===filters.status?'selected':'' %>><%= s %></option><% }) %></select><button>Search</button></form>
+<div class="scroll"><table><tr><th>Name</th><th>Type</th><th>Contact</th><th>Hospital</th><th>Status</th><th>Joined</th><th></th></tr>
+<% rows.forEach(u=>{ %><tr><td><%= u.full_name %><% if(u.blood_group){ %> <span class="b Completed"><%= u.blood_group %></span><% } %></td><td><%= ROLE_LABELS[u.role] %></td>
+<td><%= u.email %><small><%= u.phone||'' %></small></td><td><%= u.hospital||'—' %></td>
+<td><span class="b st-<%= u.status %>"><%= u.status %></span></td><td><%= new Date(u.created_at).toLocaleDateString() %></td>
+<td><% if(u.id===user.id){ %><small>You</small><% } else { %><form class="inline" method="post" action="/admin/users/<%= u.id %>/action"><input type="hidden" name="back" value="/admin/users">
+<% if(u.status==='pending'){ %><button class="sm" name="action" value="approve">Approve</button><button class="sm sec" name="action" value="reject">Reject</button>
+<% } else if(u.status==='rejected'){ %><button class="sm" name="action" value="approve">Approve</button>
+<% } else if(u.status==='active'){ %><button class="sm sec" name="action" value="suspend">Suspend</button>
+<% } else if(u.status==='suspended'){ %><button class="sm" name="action" value="reactivate">Reactivate</button><% } %></form><% } %></td></tr><% }) %>
+<% if(!rows.length){ %><tr><td colspan="7">No users match your filters.</td></tr><% } %></table></div>
+<%- include('partials/footer') %>

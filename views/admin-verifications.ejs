@@ -1,0 +1,10 @@
+<%- include('partials/header',{title:'Verifications'}) %>
+<p>Admin and healthcare professional accounts can't log in until you approve them. Check the details before approving.</p>
+<div class="scroll"><table><tr><th>Applied</th><th>Name</th><th>Account type</th><th>Contact</th><th>License / Hospital</th><th>Note</th><th></th></tr>
+<% rows.forEach(u=>{ %><tr><td><%= new Date(u.created_at).toLocaleDateString() %></td><td><%= u.full_name %></td><td><%= ROLE_LABELS[u.role] %></td>
+<td><%= u.email %><small><%= u.phone||'' %></small></td>
+<td><%= u.license_number||'—' %><small><%= u.hospital||'' %></small></td><td><%= u.verification_note||'' %></td>
+<td><form class="inline" method="post" action="/admin/users/<%= u.id %>/action"><input type="hidden" name="back" value="/admin/verifications">
+<button class="sm" name="action" value="approve">Approve</button><button class="sm sec" name="action" value="reject">Reject</button></form></td></tr><% }) %>
+<% if(!rows.length){ %><tr><td colspan="7">No accounts are waiting for verification.</td></tr><% } %></table></div>
+<%- include('partials/footer') %>

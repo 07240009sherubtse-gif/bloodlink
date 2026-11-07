@@ -1,0 +1,17 @@
+<%- include('partials/header',{title:'Dashboard'}) %>
+<p>Hello, <%= user.name %>! Here is an overview of BLOODLink.</p>
+<% if(counts.pending){ %><div class="alert"><b>Verification needed</b><p><%= counts.pending %> account<%= counts.pending===1?'':'s' %> waiting for approval.</p><a class="btn" href="/admin/verifications">Review Now</a></div><% } %>
+<div class="grid">
+<a class="tile" href="/admin/users?role=user"><b><%= counts.users %></b><span>Active users</span></a>
+<a class="tile" href="/admin/users?role=healthcare"><b><%= counts.healthcare %></b><span>Healthcare professionals</span></a>
+<a class="tile" href="/admin/users?role=admin"><b><%= counts.admins %></b><span>Admins</span></a>
+<a class="tile" href="/admin/verifications"><b><%= counts.pending %></b><span>Pending verification</span></a>
+<a class="tile" href="/admin/users?status=suspended"><b><%= counts.suspended %></b><span>Suspended</span></a>
+<a class="tile" href="/manage/requests"><b><%= requestCounts.open %></b><span>Open blood requests</span></a>
+<a class="tile" href="/manage/donations"><b><%= pendingDonations %></b><span>Pending donations</span></a>
+<a class="tile <%= criticalGroups ? 'Critical' : '' %>" href="/availability"><b><%= criticalGroups %></b><span>Critical blood groups</span></a>
+</div>
+<h3>Recent Sign-ups</h3>
+<table><tr><th>Name</th><th>Account type</th><th>Status</th><th>Joined</th></tr>
+<% recent.forEach(u=>{ %><tr><td><%= u.full_name %></td><td><%= ROLE_LABELS[u.role] %></td><td><span class="b st-<%= u.status %>"><%= u.status %></span></td><td><%= new Date(u.created_at).toLocaleDateString() %></td></tr><% }) %></table>
+<%- include('partials/footer') %>

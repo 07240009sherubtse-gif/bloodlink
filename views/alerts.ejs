@@ -1,0 +1,3 @@
+<%- include('partials/header',{title:'Donation Alerts'}) %>
+<% alerts.forEach(a=>{ %><div class="alert light"><b><%= a.title %></b><p><%= a.body %></p><small><%= new Date(a.created_at).toLocaleString() %></small></div><% }) %>
+<%- include('partials/footer') %>

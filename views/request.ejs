@@ -1,0 +1,9 @@
+<%- include('partials/header',{title:'Request Blood'}) %>
+<form class="card wide" method="post"><h3>Patient Information</h3>
+<label>Patient Name<input name="patient_name" required></label><label>Age<input type="number" name="age" min="0"></label>
+<label>Gender<select name="gender"><option>Male</option><option>Female</option><option>Other</option></select></label>
+<label>Hospital<input name="hospital" required></label>
+<label>Blood Group Needed<select name="blood_group"><% G.forEach(g=>{ %><option><%= g %></option><% }) %></select></label>
+<label>Urgent?<select name="urgent"><option value="no">No</option><option value="yes">Yes</option></select></label>
+<label>Reason / Notes<textarea name="notes"></textarea></label><button>Submit Request</button></form>
+<%- include('partials/footer') %>

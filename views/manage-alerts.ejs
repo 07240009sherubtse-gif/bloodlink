@@ -1,0 +1,9 @@
+<%- include('partials/header',{title:'Manage Alerts'}) %>
+<form class="card wide" method="post" action="/manage/alerts"><h3>Publish a New Alert</h3>
+<label>Title<input name="title" maxlength="150" required></label>
+<label>Message<textarea name="body" maxlength="1000" required></textarea></label><button>Publish Alert</button></form>
+<h3>Published Alerts</h3>
+<% alerts.forEach(a=>{ %><div class="alert light"><b><%= a.title %></b><p><%= a.body %></p><small><%= new Date(a.created_at).toLocaleString() %><%= a.author ? ' · by ' + a.author : '' %></small>
+<form method="post" action="/manage/alerts/<%= a.id %>/delete"><button class="sm sec">Delete</button></form></div><% }) %>
+<% if(!alerts.length){ %><p>No alerts yet.</p><% } %>
+<%- include('partials/footer') %>

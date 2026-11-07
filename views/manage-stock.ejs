@@ -1,0 +1,9 @@
+<%- include('partials/header',{title:'Manage Blood Stock'}) %>
+<% if(!hospital){ %><p class="msg">No hospital is linked to your account, so there is no stock to manage. Please contact an administrator.</p>
+<% } else { %>
+<p>Stock levels for <b><%= hospital %></b>. Available is 8+ units, Low is 4–7, Critical is under 4.</p>
+<form class="card wide" method="post" action="/manage/stock"><div class="grid">
+<% rows.forEach(r=>{ %><label class="tile <%= stat(r.units) %>"><b><%= r.blood_group %></b><input type="number" name="units_<%= r.blood_group %>" min="0" max="9999" step="1" value="<%= r.units %>" required><em><%= stat(r.units) %></em></label>
+<% }) %></div><button>Save Stock Levels</button></form>
+<% } %>
+<%- include('partials/footer') %>

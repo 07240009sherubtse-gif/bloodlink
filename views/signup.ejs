@@ -1,0 +1,21 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Sign Up | BLOODLink</title><link rel="stylesheet" href="/css/styles.css"></head>
+<body class="auth"><div class="hero"><h2>🩸 BLOODLink</h2><h1>Give Blood<br>Save Lives</h1><p>Be a hero. Save lives. Join our community today.</p></div>
+<form class="card" method="post" action="/signup" id="signup-form"><h2>Create Account</h2><p>Together we can make a difference.</p>
+<% if(err){ %><p class="msg"><%= err %></p><% } %>
+<fieldset class="roles"><legend>I am registering as</legend>
+<% roles.forEach(r=>{ %><label class="role"><input type="radio" name="role" value="<%= r.value %>" <%= (form.role||'user')===r.value?'checked':'' %>><span><b><%= r.label %></b><small><%= r.desc %></small><% if(r.verify){ %><em>Requires admin verification</em><% } %></span></label>
+<% }) %></fieldset>
+<p class="notice" data-verify-note <%= ['healthcare','admin'].includes(form.role)?'':'hidden' %>>This account type must be verified by an administrator before you can log in.</p>
+<label>Full Name<input name="full_name" value="<%= form.full_name||'' %>" required></label>
+<label>Phone Number<input name="phone" value="<%= form.phone||'' %>" required></label>
+<label>Email Address<input type="email" name="email" value="<%= form.email||'' %>" required></label>
+<label>Blood Group<small data-bg-optional hidden> (optional)</small><select name="blood_group" required><option value="">Select blood group</option><% G.forEach(g=>{ %><option <%= g===form.blood_group?'selected':'' %>><%= g %></option><% }) %></select></label>
+<div data-role-fields="healthcare">
+<label>Professional License Number<input name="license_number" value="<%= form.license_number||'' %>" data-required-for="healthcare" placeholder="Healthcare professionals only"></label>
+<label>Hospital / Organization<input name="hospital" value="<%= form.hospital||'' %>" list="hospital-list" data-required-for="healthcare" placeholder="Healthcare professionals only"><datalist id="hospital-list"><% hospitals.forEach(h=>{ %><option value="<%= h %>"><% }) %></datalist></label>
+</div>
+<div data-role-fields="healthcare admin"><label>Note for the verifier (optional)<textarea name="verification_note" rows="2"><%= form.verification_note||'' %></textarea></label></div>
+<label>Password<input type="password" name="password" minlength="6" required></label>
+<label>Confirm Password<input type="password" name="confirm" required></label>
+<button>Create Account</button><p class="c">Already have an account? <a href="/login">Sign In</a></p></form>
+<script src="/js/signup.js"></script></body></html>

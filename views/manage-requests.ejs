@@ -1,0 +1,11 @@
+<%- include('partials/header',{title:'Blood Requests'}) %>
+<form class="bar" method="get"><select name="status"><option value="">All statuses</option><% statuses.forEach(s=>{ %><option <%= s===status?'selected':'' %>><%= s %></option><% }) %></select><button>Filter</button></form>
+<div class="scroll"><table><tr><th>Date</th><th>Patient</th><th>Group</th><th>Hospital</th><th>Requested by</th><th>Status</th></tr>
+<% rows.forEach(r=>{ %><tr><td><%= new Date(r.created_at).toLocaleDateString() %></td>
+<td><%= r.patient_name %><small><%= r.age ? r.age + ' yrs' : '' %> <%= r.gender||'' %></small><% if(r.notes){ %><small><%= r.notes %></small><% } %></td>
+<td><%= r.blood_group %><% if(r.urgent){ %><small class="urgent">Urgent</small><% } %></td><td><%= r.hospital %></td>
+<td><%= r.requester||'—' %><small><%= r.requester_phone||'' %></small></td>
+<td><% if(canManage){ %><form class="inline" method="post" action="/manage/requests/<%= r.id %>/status"><select name="status"><% statuses.forEach(s=>{ %><option <%= s===r.status?'selected':'' %>><%= s %></option><% }) %></select><button class="sm">Update</button></form>
+<% } else { %><span class="b <%= r.status.replace(/ /g,'') %>"><%= r.status %></span><% } %></td></tr><% }) %>
+<% if(!rows.length){ %><tr><td colspan="6">No requests found.</td></tr><% } %></table></div>
+<%- include('partials/footer') %>

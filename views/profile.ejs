@@ -1,0 +1,12 @@
+<%- include('partials/header',{title:'Profile & Settings'}) %>
+<div class="card wide"><h2><%= p.full_name %> <% if(p.blood_group){ %><span class="b Completed"><%= p.blood_group %></span><% } %> <span class="b Role"><%= ROLE_LABELS[p.role] %></span></h2>
+<% if(p.role==='user'){ %><p>Total donations: <b><%= stats.total %></b> · Last donation: <b><%= stats.last ? new Date(stats.last).toLocaleDateString() : 'None yet' %></b></p><% } %>
+<form method="post" action="/profile"><label>Full Name<input name="full_name" value="<%= p.full_name %>"></label>
+<label>Email<input value="<%= p.email %>" disabled></label><label>Phone<input name="phone" value="<%= p.phone||'' %>"></label>
+<% if(p.role==='healthcare'){ %><label>Hospital / Organization<input value="<%= p.hospital||'' %>" disabled></label><label>License Number<input value="<%= p.license_number||'' %>" disabled></label><% } %>
+<label>Blood Group<select name="blood_group"><% if(p.role!=='user'){ %><option value="">Not specified</option><% } %><% G.forEach(g=>{ %><option <%= g===p.blood_group?'selected':'' %>><%= g %></option><% }) %></select></label>
+<label>Date of Birth<input type="date" name="dob" value="<%= p.dob ? new Date(p.dob).toISOString().slice(0,10) : '' %>"></label>
+<label>Address<input name="address" value="<%= p.address||'' %>"></label><button>Save Changes</button></form>
+<h3>Change Password</h3><form method="post" action="/profile/password"><label>Old Password<input type="password" name="old" required></label>
+<label>New Password<input type="password" name="new" minlength="6" required></label><label>Confirm Password<input type="password" name="confirm" required></label><button>Update Password</button></form></div>
+<%- include('partials/footer') %>
