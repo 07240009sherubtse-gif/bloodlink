@@ -1,6 +1,47 @@
-<%- include('partials/header',{title:'Find a Donor'}) %>
-<form class="bar"><input name="term" value="<%= term %>" placeholder="Search by name or location">
-<select name="bg"><option value="">All groups</option><% G.forEach(g=>{ %><option <%= g===bg?'selected':'' %>><%= g %></option><% }) %></select><button>Search</button></form>
-<h3>Available Donors</h3><% donors.forEach(d=>{ %><p class="row"><b><%= d.full_name %></b> <span class="b Completed"><%= d.blood_group %></span> <small><%= d.address||'' %></small></p><% }) %>
-<% if(!donors.length){ %><p>No donors match your search. Try a different blood group.</p><% } %>
+
+<%- include('partials/header', { title: 'Find a Donor' }) %>
+
+<h2>Find a Donor</h2>
+
+<form class="bar" method="GET">
+  <input
+    name="term"
+    value="<%= term %>"
+    placeholder="Search by name or location"
+  >
+
+  <select name="bg">
+    <option value="">All groups</option>
+    <% G.forEach(g => { %>
+      <option value="<%= g %>" <%= g === bg ? 'selected' : '' %>>
+        <%= g %>
+      </option>
+    <% }) %>
+  </select>
+
+  <button type="submit">Search</button>
+</form>
+
+<h3>Available Donors</h3>
+
+<% donors.forEach(d => { %>
+  <div class="row" style="display:block; padding:15px; margin-bottom:15px;">
+    <b><%= d.full_name %></b>
+    <span class="b Completed"><%= d.blood_group %></span>
+
+    <p><small><%= d.address || 'Location not provided' %></small></p>
+
+    <% if (canViewContact && d.phone) { %>
+      <p><strong>Phone:</strong> <%= d.phone %></p>
+      <a href="tel:<%= d.phone %>" class="btn">
+        Contact Donor
+      </a>
+    <% } %>
+  </div>
+<% }) %>
+
+<% if (!donors.length) { %>
+  <p>No donors match your search. Try a different blood group.</p>
+<% } %>
+
 <%- include('partials/footer') %>
