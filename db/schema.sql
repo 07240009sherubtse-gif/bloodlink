@@ -16,7 +16,20 @@ CREATE TABLE IF NOT EXISTS blood_requests(
   status TEXT DEFAULT 'Requested', created_at TIMESTAMP DEFAULT now());
 CREATE TABLE IF NOT EXISTS donations(
   id SERIAL PRIMARY KEY, user_id INT REFERENCES users(id), hospital TEXT, blood_group TEXT,
-  donated_on DATE, status TEXT DEFAULT 'Pending', created_at TIMESTAMP DEFAULT now());
+  donated_on DATE, status TEXT DEFAULT 'Pending',
+  feeling_healthy BOOLEAN NOT NULL DEFAULT false,
+  illness_symptoms BOOLEAN NOT NULL DEFAULT false,
+  recent_donation BOOLEAN NOT NULL DEFAULT false,
+  taking_medication BOOLEAN NOT NULL DEFAULT false,
+  previous_deferral BOOLEAN NOT NULL DEFAULT false,
+  has_certificate BOOLEAN NOT NULL DEFAULT false,
+  information_confirmed BOOLEAN NOT NULL DEFAULT false,
+  terms_accepted BOOLEAN NOT NULL DEFAULT false,
+  contact_consent BOOLEAN NOT NULL DEFAULT false,
+  screening_status TEXT NOT NULL DEFAULT 'Pending Review',
+  screening_reviewed_by INT REFERENCES users(id),
+  screening_reviewed_at TIMESTAMP,
+  created_at TIMESTAMP DEFAULT now());
 CREATE TABLE IF NOT EXISTS hospital_stock(
   hospital TEXT, blood_group TEXT, units INT, PRIMARY KEY(hospital, blood_group));
 CREATE TABLE IF NOT EXISTS alerts(

@@ -75,6 +75,9 @@ describe('other validators', () => {
   test('toId', () => {
     expect(v.toId('12')).toBe(12);
     expect(v.toId('0')).toBeNull();
+    expect(v.toId('1e2')).toBeNull();
+    expect(v.toId('9007199254740992')).toBeNull();
+    expect(v.toId(12)).toBeNull();
     expect(v.toId('1; DROP')).toBeNull();
     expect(v.toId('1.5')).toBeNull();
   });
@@ -92,11 +95,39 @@ describe('other validators', () => {
     expect(v.validateBloodRequest(ok).data.urgent).toBe(true);
     expect(v.validateBloodRequest({ ...ok, blood_group: 'Q' }).error).toBeDefined();
     expect(v.validateBloodRequest({ ...ok, age: '-3' }).error).toBeDefined();
+    expect(v.validateBloodRequest({ ...ok, age: '1e2' }).error).toMatch(/age/i);
+    expect(v.validateBloodRequest(null).error).toBeDefined();
   });
 
   test('validateDonation', () => {
-    expect(v.validateDonation({ hospital: 'H', blood_group: 'B-', donated_on: '' }).error).toBeUndefined();
+    const form = {
+      hospital: 'H',
+      blood_group: 'B-',
+      donated_on: '',
+      feeling_healthy: 'yes',
+      illness_symptoms: 'no',
+      recent_donation: 'no',
+      taking_medication: 'no',
+      previous_deferral: 'no',
+      has_certificate: 'no',
+      information_confirmed: 'on',
+      terms: 'on'
+    };
+    const result = v.validateDonation(form);
+    expect(result.error).toBeUndefined();
+    expect(result.data).toMatchObject({
+      feeling_healthy: true,
+      illness_symptoms: false,
+      has_certificate: false,
+      information_confirmed: true,
+      terms_accepted: true,
+      contact_consent: false
+    });
     expect(v.validateDonation({ hospital: '', blood_group: 'B-' }).error).toBeDefined();
+    expect(v.validateDonation({ ...form, feeling_healthy: 'maybe' }).error).toMatch(/screening/i);
+    expect(v.validateDonation({ ...form, has_certificate: '' }).error).toMatch(/certificate/i);
+    expect(v.validateDonation({ ...form, contact_consent: 'on' }).data.contact_consent).toBe(true);
+    expect(v.validateDonation(null).error).toBeDefined();
   });
 
   test('validateAlert', () => {

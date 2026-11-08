@@ -70,6 +70,13 @@ describe('user role', () => {
     expect(res.status).toBe(403);
     expect(User.transition).not.toHaveBeenCalled();
   });
+  test('cannot review donor screening', async () => {
+    const agent = await loginAs({ role: 'user' });
+    const res = await agent.post('/manage/donations/4/screening');
+
+    expect(res.status).toBe(403);
+    expect(Donation.reviewScreening).not.toHaveBeenCalled();
+  });
 });
 
 describe('healthcare role', () => {
@@ -92,6 +99,22 @@ describe('healthcare role', () => {
     for (const path of ['/manage/stock', '/manage/requests', '/manage/donations', '/manage/alerts', '/dashboard']) {
       expect((await agent.get(path)).status).toBe(200);
     }
+  });
+  test('can mark a donor screening as reviewed', async () => {
+    Donation.reviewScreening.mockResolvedValue('reviewed');
+    const agent = await loginAs({ role: 'healthcare', id: 8, hospital: 'JDWNR Hospital' });
+    const res = await agent.post('/manage/donations/4/screening');
+
+    expect(res.status).toBe(302);
+    expect(res.headers.location).toBe('/manage/donations?ok=Donor%20screening%20marked%20as%20reviewed.');
+    expect(Donation.reviewScreening).toHaveBeenCalledWith(4, 8);
+  });
+  test('cannot complete a donation before screening review', async () => {
+    Donation.setStatus.mockResolvedValue('screening_required');
+    const agent = await loginAs({ role: 'healthcare', hospital: 'JDWNR Hospital' });
+    const res = await agent.post('/manage/donations/4/status').type('form').send({ status: 'Completed' });
+
+    expect(decodeURIComponent(res.headers.location)).toMatch(/review the donor screening/i);
   });
   test('cannot donate, request blood or use admin pages', async () => {
     const agent = await loginAs({ role: 'healthcare', hospital: 'H' });

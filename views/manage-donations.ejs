@@ -1,11 +1,13 @@
 <%- include('partials/header',{title:'Donations'}) %>
 <% if(canManage){ %><p>Marking a donation <b>Completed</b> adds 1 unit to <%= hospital ? hospital + ' stock' : 'stock' %> and can't be undone.</p><% } %>
 <form class="bar" method="get"><select name="status"><option value="">All statuses</option><% statuses.forEach(s=>{ %><option <%= s===status?'selected':'' %>><%= s %></option><% }) %></select><button>Filter</button></form>
-<div class="scroll"><table><tr><th>Submitted</th><th>Donor</th><th>Group</th><th>Hospital</th><th>Last donated</th><th>Status</th></tr>
+<div class="scroll"><table><tr><th>Submitted</th><th>Donor</th><th>Group</th><th>Hospital</th><th>Last donated</th><th>Screening</th><th>Status</th></tr>
 <% rows.forEach(d=>{ %><tr><td><%= new Date(d.created_at).toLocaleDateString() %></td>
 <td><%= d.donor||'—' %><small><%= d.donor_phone||'' %></small></td><td><%= d.blood_group %></td><td><%= d.hospital %></td>
 <td><%= d.donated_on ? new Date(d.donated_on).toLocaleDateString() : '—' %></td>
+<td><% if(canManage && d.screening_status==='Pending Review'){ %><form class="inline" method="post" action="/manage/donations/<%= d.id %>/screening"><button class="sm">Mark reviewed</button></form>
+<% } else { %><span><%= d.screening_status || 'Pending Review' %></span><% } %></td>
 <td><% if(canManage && d.status!=='Completed'){ %><form class="inline" method="post" action="/manage/donations/<%= d.id %>/status"><select name="status"><% statuses.forEach(s=>{ %><option <%= s===d.status?'selected':'' %>><%= s %></option><% }) %></select><button class="sm">Update</button></form>
 <% } else { %><span class="b <%= d.status.replace(/ /g,'') %>"><%= d.status %></span><% } %></td></tr><% }) %>
-<% if(!rows.length){ %><tr><td colspan="6">No donations found.</td></tr><% } %></table></div>
+<% if(!rows.length){ %><tr><td colspan="7">No donations found.</td></tr><% } %></table></div>
 <%- include('partials/footer') %>

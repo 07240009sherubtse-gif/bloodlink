@@ -52,6 +52,7 @@ router.get('/manage/stock', clinician, wrap(healthcare.stockPage));
 router.post('/manage/stock', clinician, wrap(healthcare.saveStock));
 router.post('/manage/requests/:id/status', clinician, wrap(healthcare.updateRequest));
 router.post('/manage/donations/:id/status', clinician, wrap(healthcare.updateDonation));
+router.post('/manage/donations/:id/screening', clinician, wrap(healthcare.reviewDonationScreening));
 
 // ---- Healthcare + admin: view requests/donations (admin read-only), manage alerts ----
 const staff = requireRole(HEALTHCARE, ADMIN);

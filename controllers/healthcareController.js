@@ -53,6 +53,17 @@ exports.updateDonation = async (req, res) => {
   const result = await Donation.setStatus(id, req.body.status, req.user.hospital);
   if (result === 'notfound') return flash(res, '/manage/donations', 'err', 'Donation not found.');
   if (result === 'locked') return flash(res, '/manage/donations', 'err', 'Completed donations can no longer be changed.');
+  if (result === 'screening_required') return flash(res, '/manage/donations', 'err', 'Review the donor screening before marking this donation completed.');
   const extra = result === 'credited' ? ` 1 unit added to ${req.user.hospital} stock.` : '';
   flash(res, '/manage/donations', 'ok', `Donation marked "${req.body.status}".${extra}`);
+};
+
+exports.reviewDonationScreening = async (req, res) => {
+  const id = toId(req.params.id);
+  if (!id) return flash(res, '/manage/donations', 'err', 'Invalid donation.');
+
+  const result = await Donation.reviewScreening(id, req.user.id);
+  if (result === 'notfound') return flash(res, '/manage/donations', 'err', 'Donation not found.');
+  if (result === 'already_reviewed') return flash(res, '/manage/donations', 'err', 'This screening has already been reviewed.');
+  flash(res, '/manage/donations', 'ok', 'Donor screening marked as reviewed.');
 };

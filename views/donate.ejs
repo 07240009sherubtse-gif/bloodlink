@@ -1,8 +1,139 @@
-<%- include('partials/header',{title:'Donate Blood'}) %>
-<form class="card wide" method="post"><h3>Donor Information</h3>
-<label>Blood Group<select name="blood_group"><% G.forEach(g=>{ %><option <%= g===user.bg?'selected':'' %>><%= g %></option><% }) %></select></label>
-<label>Last Donation Date<input type="date" name="donated_on"></label>
-<label>Hospital / Location<input name="hospital" required></label>
-<label class="chk"><input type="checkbox" required> I agree to the terms and conditions</label>
-<button>Register as Donor</button></form>
+
+<%- include('partials/header', { title: 'Donate Blood' }) %>
+
+<form class="card wide" method="post">
+
+  <h2>Donate Blood</h2>
+  <p>
+    Complete this preliminary donor registration form.
+    A healthcare professional will review your information.
+    Final eligibility is determined by the blood donation service.
+  </p>
+
+  <h3>Donor Information</h3>
+
+  <label>
+    Blood Group
+    <select name="blood_group" required>
+      <% G.forEach(g => { %>
+        <option value="<%= g %>"
+          <%= g === user.bg ? 'selected' : '' %>>
+          <%= g %>
+        </option>
+      <% }) %>
+    </select>
+  </label>
+
+  <label>
+    Last Donation Date
+    <input type="date" name="donated_on">
+  </label>
+
+  <label>
+    Hospital / Location
+    <input
+      type="text"
+      name="hospital"
+      placeholder="Enter hospital or location"
+      required
+    >
+  </label>
+
+  <hr>
+
+  <h3>Preliminary Donor Health Checklist</h3>
+
+  <p>
+    Please answer honestly. These questions do not
+    determine your final eligibility to donate.
+  </p>
+
+  <label>
+    Are you feeling healthy today?
+    <select name="feeling_healthy" required>
+      <option value="">Select</option>
+      <option value="yes">Yes</option>
+      <option value="no">No</option>
+    </select>
+  </label>
+
+  <label>
+    Are you currently experiencing fever or symptoms of illness?
+    <select name="illness_symptoms" required>
+      <option value="">Select</option>
+      <option value="yes">Yes</option>
+      <option value="no">No</option>
+    </select>
+  </label>
+
+  <label>
+    Have you donated blood recently?
+    <select name="recent_donation" required>
+      <option value="">Select</option>
+      <option value="yes">Yes</option>
+      <option value="no">No</option>
+    </select>
+  </label>
+
+  <label>
+    Are you currently taking any medications?
+    <select name="taking_medication" required>
+      <option value="">Select</option>
+      <option value="yes">Yes</option>
+      <option value="no">No</option>
+    </select>
+  </label>
+
+  <label>
+    Have you previously been advised not to donate blood?
+    <select name="previous_deferral" required>
+      <option value="">Select</option>
+      <option value="yes">Yes</option>
+      <option value="no">No</option>
+    </select>
+  </label>
+
+  <hr>
+
+  <h3>Medical Certificate</h3>
+
+  <p>
+    Let us know whether you have a relevant medical certificate.
+    A healthcare professional may ask to verify it during review;
+    it does not guarantee donation eligibility.
+  </p>
+
+  <label>
+    Do you have a medical certificate?
+    <select name="has_certificate" required>
+      <option value="">Select</option>
+      <option value="yes">Yes</option>
+      <option value="no">No</option>
+    </select>
+  </label>
+
+  <hr>
+
+  <h3>Declaration and Consent</h3>
+
+  <label class="chk">
+    <input type="checkbox" name="information_confirmed" required>
+    I confirm that the information provided is accurate.
+  </label>
+
+  <label class="chk">
+    <input type="checkbox" name="contact_consent">
+    I agree to be contacted by authorised healthcare
+    professionals regarding my donation registration (optional).
+  </label>
+
+  <label class="chk">
+    <input type="checkbox" name="terms" required>
+    I agree to the terms and conditions.
+  </label>
+
+  <button type="submit">Submit Donor Registration</button>
+
+</form>
+
 <%- include('partials/footer') %>
