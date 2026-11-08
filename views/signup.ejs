@@ -9,7 +9,7 @@
 <label>Full Name<input name="full_name" value="<%= form.full_name||'' %>" required></label>
 <label>Phone Number<input name="phone" value="<%= form.phone||'' %>" required></label>
 <label>Email Address<input type="email" name="email" value="<%= form.email||'' %>" required></label>
-<label>Blood Group<small data-bg-optional hidden> (optional)</small><select name="blood_group" required><option value="">Select blood group</option><% G.forEach(g=>{ %><option <%= g===form.blood_group?'selected':'' %>><%= g %></option><% }) %></select></label>
+<label>Blood Group<small data-bg-optional hidden> (optional)</small><select name="blood_group" required><option value="">Select blood group</option><% G.forEach(g=>{ %><option value="<%= g %>" <%= g===form.blood_group?'selected':'' %>><%= g %></option><% }) %></select></label>
 <div data-role-fields="healthcare">
 <label>Professional License Number<input name="license_number" value="<%= form.license_number||'' %>" data-required-for="healthcare" placeholder="Healthcare professionals only"></label>
 <label>Hospital / Organization<input name="hospital" value="<%= form.hospital||'' %>" list="hospital-list" data-required-for="healthcare" placeholder="Healthcare professionals only"><datalist id="hospital-list"><% hospitals.forEach(h=>{ %><option value="<%= h %>"><% }) %></datalist></label>
@@ -17,5 +17,5 @@
 <div data-role-fields="healthcare admin"><label>Note for the verifier (optional)<textarea name="verification_note" rows="2"><%= form.verification_note||'' %></textarea></label></div>
 <label>Password<input type="password" name="password" minlength="6" required></label>
 <label>Confirm Password<input type="password" name="confirm" required></label>
-<button>Create Account</button><p class="c">Already have an account? <a href="/login">Sign In</a></p></form>
+<button type="submit">Create Account</button><p class="c">Already have an account? <a href="/login">Sign In</a></p></form>
 <script src="/js/signup.js"></script></body></html>

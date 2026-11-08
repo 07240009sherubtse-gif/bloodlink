@@ -1,9 +1,14 @@
 
 <%- include('partials/header', { title: 'Donate Blood' }) %>
 
-<form class="card wide" method="post">
+<form
+  class="card wide"
+  action="/donate"
+  method="POST"
+>
 
   <h2>Donate Blood</h2>
+
   <p>
     Complete this preliminary donor registration form.
     A healthcare professional will review your information.
@@ -16,8 +21,10 @@
     Blood Group
     <select name="blood_group" required>
       <% G.forEach(g => { %>
-        <option value="<%= g %>"
-          <%= g === user.bg ? 'selected' : '' %>>
+        <option
+          value="<%= g %>"
+          <%= g === user.bg ? 'selected' : '' %>
+        >
           <%= g %>
         </option>
       <% }) %>
@@ -26,7 +33,10 @@
 
   <label>
     Last Donation Date
-    <input type="date" name="donated_on">
+    <input
+      type="date"
+      name="donated_on"
+    >
   </label>
 
   <label>
@@ -35,6 +45,7 @@
       type="text"
       name="hospital"
       placeholder="Enter hospital or location"
+      maxlength="120"
       required
     >
   </label>
@@ -44,8 +55,9 @@
   <h3>Preliminary Donor Health Checklist</h3>
 
   <p>
-    Please answer honestly. These questions do not
-    determine your final eligibility to donate.
+    Please answer all questions honestly.
+    These answers are for preliminary screening only
+    and do not confirm your eligibility to donate blood.
   </p>
 
   <label>
@@ -98,9 +110,10 @@
   <h3>Medical Certificate</h3>
 
   <p>
-    Let us know whether you have a relevant medical certificate.
-    A healthcare professional may ask to verify it during review;
-    it does not guarantee donation eligibility.
+    Let us know whether you have a relevant medical
+    certificate. A healthcare professional may ask
+    to verify it during review.
+    A certificate does not guarantee donation eligibility.
   </p>
 
   <label>
@@ -117,22 +130,36 @@
   <h3>Declaration and Consent</h3>
 
   <label class="chk">
-    <input type="checkbox" name="information_confirmed" required>
+    <input
+      type="checkbox"
+      name="information_confirmed"
+      required
+    >
     I confirm that the information provided is accurate.
   </label>
 
   <label class="chk">
-    <input type="checkbox" name="contact_consent">
+    <input
+      type="checkbox"
+      name="contact_consent"
+    >
     I agree to be contacted by authorised healthcare
-    professionals regarding my donation registration (optional).
+    professionals regarding my donation registration.
+    (Optional)
   </label>
 
   <label class="chk">
-    <input type="checkbox" name="terms" required>
+    <input
+      type="checkbox"
+      name="terms"
+      required
+    >
     I agree to the terms and conditions.
   </label>
 
-  <button type="submit">Submit Donor Registration</button>
+  <button type="submit">
+    Submit Donor Registration
+  </button>
 
 </form>
 

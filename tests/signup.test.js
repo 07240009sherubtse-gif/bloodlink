@@ -1,6 +1,7 @@
 jest.mock('../models/User');
 jest.mock('../models/Stock');
 
+const bcrypt = require('bcrypt');
 const User = require('../models/User');
 const Stock = require('../models/Stock');
 const { request, app } = require('./helpers');
@@ -17,16 +18,33 @@ beforeEach(() => {
 test('signup page offers all three roles', async () => {
   const res = await request(app).get('/signup');
   expect(res.status).toBe(200);
+  expect(res.text).toMatch(/<form[^>]*method="post"[^>]*action="\/signup"/i);
+  expect(res.text).toMatch(/<button type="submit">Create Account<\/button>/);
   expect(res.text).toMatch(/value="user"/);
   expect(res.text).toMatch(/value="healthcare"/);
   expect(res.text).toMatch(/value="admin"/);
 });
 
 test('a user is active immediately and logged in', async () => {
-  const res = await request(app).post('/signup').type('form').send({ ...valid, role: 'user' });
+  const res = await request(app).post('/signup').type('form').send({
+    ...valid,
+    full_name: '  Tashi Dorji  ',
+    email: 'Tashi@Example.com',
+    role: 'user'
+  });
   expect(res.status).toBe(302);
   expect(res.headers.location).toBe('/dashboard');
-  expect(User.create.mock.calls[0][0]).toMatchObject({ role: 'user', status: 'active' });
+  const [created] = User.create.mock.calls[0];
+  expect(created).toMatchObject({
+    full_name: 'Tashi Dorji',
+    phone: '17',
+    email: 'tashi@example.com',
+    blood_group: 'A+',
+    role: 'user',
+    status: 'active'
+  });
+  expect(created.password_hash).not.toBe(valid.password);
+  await expect(bcrypt.compare(valid.password, created.password_hash)).resolves.toBe(true);
 });
 
 test.each([
