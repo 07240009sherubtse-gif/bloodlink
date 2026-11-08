@@ -7,8 +7,15 @@ const PUBLIC = `id, full_name, email, phone, blood_group, dob, address, role, st
 exports.findById = (id) => db.oneOrNone(`SELECT ${PUBLIC} FROM users WHERE id=$1`, [id]);
 
 // Phone numbers aren't unique, so this can return several rows; the caller checks each password.
-exports.findByLogin = (identifier) =>
-  db.any('SELECT * FROM users WHERE LOWER(email)=LOWER($1) OR phone=$1', [identifier]);
+exports.findByLogin = (identifier) => {
+  const phoneDigits = identifier.replace(/[^0-9]/g, '');
+  return db.any(
+    `SELECT * FROM users
+     WHERE LOWER(email)=LOWER($1) OR phone=$1
+       OR ($2<>'' AND regexp_replace(COALESCE(phone,''), '[^0-9]', '', 'g')=$2)`,
+    [identifier, phoneDigits]
+  );
+};
 
 exports.emailExists = async (email) =>
   !!(await db.oneOrNone('SELECT 1 FROM users WHERE LOWER(email)=LOWER($1)', [email]));
