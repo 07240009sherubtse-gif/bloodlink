@@ -40,6 +40,20 @@ test('anonymous visitors are sent to /login', async () => {
 });
 
 describe('user role', () => {
+  test('can search donors without seeing contact details', async () => {
+    User.listDonors.mockResolvedValue([
+      { full_name: 'Donor', blood_group: 'O+', phone: '12345' }
+    ]);
+    const agent = await loginAs({ role: 'user' });
+    const res = await agent.get('/find');
+
+    expect(res.status).toBe(200);
+    expect(res.text).not.toContain('12345');
+    expect(User.listDonors).toHaveBeenCalledWith(
+      expect.objectContaining({ includeContact: false })
+    );
+  });
+
   test('can donate and request with the same account', async () => {
     const agent = await loginAs({ role: 'user' });
     expect((await agent.get('/donate')).status).toBe(200);
@@ -59,6 +73,20 @@ describe('user role', () => {
 });
 
 describe('healthcare role', () => {
+  test('can search donors and view their contact details', async () => {
+    User.listDonors.mockResolvedValue([
+      { full_name: 'Donor', blood_group: 'O+', phone: '12345' }
+    ]);
+    const agent = await loginAs({ role: 'healthcare', hospital: 'JDWNR Hospital' });
+    const res = await agent.get('/find');
+
+    expect(res.status).toBe(200);
+    expect(res.text).toContain('12345');
+    expect(User.listDonors).toHaveBeenCalledWith(
+      expect.objectContaining({ includeContact: true })
+    );
+  });
+
   test('can open stock, requests, donations and alerts', async () => {
     const agent = await loginAs({ role: 'healthcare', hospital: 'JDWNR Hospital' });
     for (const path of ['/manage/stock', '/manage/requests', '/manage/donations', '/manage/alerts', '/dashboard']) {

@@ -80,8 +80,7 @@ exports.updatePassword = (id, hash) =>
 
 // DONOR SEARCH
 // Only active user accounts with a blood group are searchable.
-// Contact information is included only when explicitly requested.
-// The controller must authorise access and check donor consent.
+// Contact fields are included only for explicitly authorised callers.
 exports.listDonors = ({
   excludeId,
   bg = '',
